@@ -1,0 +1,122 @@
+.chatBox {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  /* flex-wrap:wrap */
+  min-width: 100px;
+}
+.chatBox_message {
+  position: relative;
+  flex: 0.9;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.chatBox_input {
+  border-top: 1px solid darkgray;
+  flex: 0.1;
+}
+.chatBox_header {
+  padding: 27px;
+  border-bottom: 1px solid lightgray;
+  display: flex;
+  justify-content: space-between;
+}
+.chatBox_header button {
+  padding: 4px;
+  background: red;
+}
+
+.chatBox_messasge_box {
+  padding: 19px 0px 0px 28px;
+  word-break: break-all;
+}
+.chatBox_messasge_box p {
+  padding: 10px 10px 10px 20px;
+  margin-bottom: 10px;
+  font-size: 11px;
+  font-family: Consolas;
+  line-height: 1.4;
+}
+.chatBox_messasge_box p h5 {
+  letter-spacing: 2px;
+  font-family: Gill Sans MT;
+  font-size: 13px;
+  display: flex;
+  align-content: center;
+}
+.chatBox_messasge_box p h5 span {
+  padding-top: 7px;
+}
+.chatBox_header p {
+  font-size: 14px;
+}
+.chatBox_header p span {
+  margin-left: 20px;
+}
+.chatBox_input {
+  padding: 30px 10px 10px 10px;
+}
+.chatBox_input_box input {
+  width: 80%;
+  height: 26px;
+  border-radius: 5px;
+  outline: none;
+  border: 1px solid gray;
+  padding: 10px;
+}
+.input_handler {
+}
+.send {
+  position: relative;
+  transform: none !important;
+  height: 37px !important;
+}
+.chatBox_input_box {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-end;
+  justify-content: space-evenly;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: darkgray;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #888;
+}
+#DelBtn {
+  min-width: 0px;
+  width: 10px;
+  height: 26px;
+}
+.menu {
+  position: absolute;
+  left: 5px;
+  top: 20px;
+  font-size: 30px !important;
+}
+.close {
+  color: #59175b;
+  min-width: 0px;
+  max-width: 0px;
+}
+
+/* It will run when menu click  */
+.open {
+  max-width: 190px;
+  color: white;
+}
+
+.deleted {
+  font-family: Kristen ITC;
+  color: red;
+  font-size: 3.3vw;
+  padding: 20px;
+}

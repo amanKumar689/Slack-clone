@@ -1,0 +1,35 @@
+.Header {
+  min-width: 200px;
+  min-height: 20px;
+  padding: 7px 25px 7px 10px;
+  background-color: #4f1451;
+}
+.Header #logo_img {
+  width: 40px;
+  object-fit: contain;
+}
+.logo {
+  padding: 0px 20px 0px 20px;
+  display: flex;
+  justify-content: space-between;
+}
+.Auth_logo {
+  cursor: pointer;
+}
+.logo nav {
+  color: white;
+  position: absolute;
+  right: 40px;
+  top: 50px;
+  background-color: black;
+  padding: 3px 20px 3px 20px;
+  border-radius: 20px 20px 20px 20px;
+  cursor: pointer;
+  color: gray;
+  z-index: 3;
+}
+.logo nav:hover {
+  transition: 0.3s ease;
+  color: white;
+  padding: 5px 25px 5px 25px;
+}

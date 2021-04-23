@@ -1,0 +1,15 @@
+* {
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+}
+
+.slack_body {
+  display: flex;
+  height: calc(100vh - 60px);
+  min-height: 500px;
+}
+.google {
+  display: flex;
+  justify-content: center;
+}

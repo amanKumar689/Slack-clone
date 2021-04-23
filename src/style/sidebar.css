@@ -1,0 +1,68 @@
+.sidebar {
+  min-width: 190px;
+  background-color: #59175b;
+  padding: 65px 0px 15px 0px;
+  color: white;
+  flex: 0.2;
+  transition: 1s ease;
+  overflow: hidden;
+  position: relative;
+}
+.sidebar_header {
+  border-top: 1px solid #371038;
+  border-bottom: 1px solid #371038;
+  padding: 12px 10px 13px 20px;
+  font-size: 13px;
+  color: #ebebeb;
+  font-family: Lucida Console;
+  letter-spacing: 1px;
+}
+.sidebar ul {
+  color: inherit;
+  list-style-type: none;
+  font-size: 14px;
+  font-family: Calibri;
+  letter-spacing: 1px;
+}
+.sidebar ul li {
+  min-width: 190px !important;
+}
+.sidebar ul li:not(:last-of-type) {
+  padding: 10px 3px 10px 28px;
+  font-size: 13px;
+  font-family: Courier;
+  letter-spacing: 1px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.sidebar ul li:not(:last-of-type):hover {
+  background-color: #4f1451;
+}
+.MuiSvgIcon-root {
+  /* display:flex; */
+  /* flex-wrap:wrap; */
+  position: absolute;
+  top: -5px;
+  cursor: pointer;
+}
+.MuiSvgIcon-root:hover {
+  /* transition: 0.3s ease; */
+  /* transform: rotateZ(90deg); */
+}
+.sidebar_body p {
+  position: relative;
+  font-size: 14px;
+  font-family: Calibri;
+  letter-spacing: 1px;
+  padding-left: 17px;
+  margin-top: 30px;
+  margin-bottom: 5px;
+  max-height: 17px;
+  min-width: 190px;
+}
+.sidebar_body ul li:last-of-type {
+  position: relative;
+  margin-top: 10px;
+  padding: 0px 0px 0px 15px;
+}
