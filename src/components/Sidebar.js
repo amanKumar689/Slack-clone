@@ -9,7 +9,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import { db } from "../config/config";
+import { db, authState } from "../config/config";
 import { withRouter } from "react-router-dom";
 import firebase from "firebase";
 import { InfoContext } from "./reducer";
@@ -30,29 +30,33 @@ class Sidebar extends Component {
     this.channelHandler = this.channelHandler.bind(this);
   }
 
-  //Let's Fetch Channel List
-
   componentDidMount(prevprops) {
-    db.collection("rooms").onSnapshot((snap) => {
-      const List = [];
-      snap.forEach(({ id }) => {
-        List.push(id);
+    const [state, dispatch] = this.context;
+    authState().then((user) => {
+      dispatch({
+        type: "USER",
+        user: user,
       });
-      this.setState({ ...this.state, channelList: List });
+
+      // Fetch first time channel List from my Locker
+      db.collection("rooms")
+        .doc(user.uid)
+        .collection("roomManage")
+        .onSnapshot((snap) => {
+          const List = [];
+          snap.forEach(({ id }) => {
+            List.push(id);
+          });
+
+          dispatch({
+            type: "SET_CHANNELS",
+            channels: List,
+          });
+        });
     });
   }
 
-  // Set Channel to  Store
-
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.channelList != this.state.channelList) {
-      const [state, dispatch] = this.context;
-      dispatch({
-        type: "SET_CHANNELS",
-        channels: this.state.channelList,
-      });
-    }
-  }
+  componentDidUpdate(prevProps, prevState) {}
 
   handleClickOpen = () => {
     this.setState({ ...this.state, open: true });
@@ -62,10 +66,16 @@ class Sidebar extends Component {
 
   handleClose = (event) => {
     if (event.currentTarget.id === "create") {
-      const df = db.collection("rooms").doc(this.state.TempRoomName);
-      df.set({ desc: "about channel " });
-      df.collection("MessagesDetail")
-        .doc("Startup_message")
+      const df = db
+        .collection("rooms")
+        .doc(this.context[0].user.uid)
+        .collection("roomManage")
+        .doc(this.state.TempRoomName);
+      df.set({
+        desc: "this is about room name",
+      });
+      df.collection("messages")
+        .doc("startup_message")
         .set({
           message: "welcome to this channel",
           timeAtcreated: firebase.firestore.FieldValue.serverTimestamp(),
@@ -75,7 +85,7 @@ class Sidebar extends Component {
           console.log(err);
         });
     }
-    this.setState({ ...this.state, open: false });
+    this.setState({ ...this.state, open: false }); // manage dialog opening
   };
 
   roomNameHandler(event) {
@@ -110,15 +120,15 @@ class Sidebar extends Component {
             <CloseIcon />
           </span>
         )}
-        <div className="sidebar_header">{this.context[0].username}</div>
+        <div className="sidebar_header">{this.context[0]?.username}</div>
         <div className="sidebar_body">
           {/* channel Name + Add Channel  */}
           <p>
             Channels &nbsp; <ArrowDropDownIcon />
           </p>
           <ul>
-            {this.state.channelList.length != 0 &&
-              this.state.channelList.map((channel, index) => {
+            {this.context[0].channelList.length != 0 &&
+              this.context[0].channelList.map((channel, index) => {
                 return (
                   <li key={index} id={channel} onClick={this.channelHandler}>
                     # {channel}

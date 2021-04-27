@@ -12,30 +12,12 @@ class SlackApp extends React.Component {
     this.state = {
       data: [],
       runStatus: true,
+      unsubscribe: null,
     };
   }
 
   // setting room name from our Store
   componentDidMount() {
-    let name = this.props.location.search;
-    if (name != "") {
-      //  console.log("name",name);
-
-      name = name.split("?");
-      name = name.splice(1);
-      name = name[0].split("=").splice("1");
-
-      const [state, dispatch] = this.context;
-      dispatch({
-        type: "SET_ROOM_NAME",
-        roomName: name[0],
-      });
-    }
-
-    this.Message_fetching();
-  }
-
-  Message_fetching() {
     const [state, dispatch] = this.context;
     let name = this.props.location.search;
 
@@ -49,34 +31,83 @@ class SlackApp extends React.Component {
         check = check.join(" ");
         name = check;
       }
-      if (state.CurrentRoomName != name) {
-        dispatch({
-          type: "SET_ROOM_NAME",
-          roomName: name,
+
+      dispatch({
+        type: "SET_ROOM_NAME",
+        roomName: name[0],
+      });
+    }
+  }
+
+  // Method 1
+
+  onSnapshotIntializer(name) {
+    const [state, dispatch] = this.context;
+    const unsubscribe = db
+      .collection("rooms")
+      .doc(state.user.uid)
+      .collection("roomManage")
+      .doc(name)
+      .collection("messages")
+      .orderBy("timeAtcreated", "asc")
+      .onSnapshot((snap) => {
+        const MessageData = [];
+        snap.docChanges().forEach((val) => {
+          if (!val.doc.metadata.hasPendingWrites) {
+            MessageData.push(val.doc.data());
+          }
         });
 
-        //  Let's Fetch Message from firebase (Speific room)
-        // run this piece of code when room changes
-        db.collection("rooms")
-          .doc(name)
-          .collection("MessagesDetail")
-          .orderBy("timeAtcreated", "asc")
-          .onSnapshot((snap) => {
-            const MessageData = [];
-            snap.forEach((val) => {
-              MessageData.push(val.data());
-            });
-            this.setState({
-              ...this.state,
-              data: MessageData,
-            });
+        dispatch({
+          type: "MESSAGE_PUSH",
+          message: MessageData,
+        });
+      });
+
+    dispatch({
+      type: "EMPTY_MSG_BOX",
+      val: [],
+    });
+
+    this.setState({ ...this.state, unsubscribe: unsubscribe });
+  }
+
+  //Method 2
+
+  //Fetching Messages first time when room changes
+
+  Message_fetching() {
+    const [state, dispatch] = this.context;
+    let name = this.props.location.search;
+    if (name != "") {
+      name = name.split("?");
+      name = name.splice(1);
+      name = name[0].split("=").splice("1");
+      name = name[0];
+      if (name.search("%")) {
+        let check = name.split("%20");
+        check = check.join(" ");
+        name = check;
+      }
+
+      if (state.user != null) {
+        if (this.context[0].CurrentRoomName != name) {
+          !this.context[0].CurrentRoomName == "No Room Selected" &&
+            this.state.unsubscribe();
+          this.onSnapshotIntializer(name);
+          dispatch({
+            type: "SET_ROOM_NAME",
+            roomName: name,
           });
+        }
       }
     }
   }
+
   componentDidUpdate(prevProps, prevState) {
     this.Message_fetching();
   }
+
   render() {
     return (
       <>
@@ -84,7 +115,7 @@ class SlackApp extends React.Component {
           <Header />
           <div className="slack_body">
             <Sidebar />
-            <Chat data={this.state.data} />
+            <Chat data={this.context[0].MSG} />
           </div>
         </div>
       </>

@@ -8,6 +8,9 @@ const intialState = {
   closeBtnShow: false,
   CloseBtn: false,
   menuBtn: false,
+  user: null,
+  MessageStore: [],
+  sendWithBtn: false,
 };
 
 function reducer(state, action) {
@@ -26,7 +29,28 @@ function reducer(state, action) {
         CloseBtn: action.CloseBtn,
         menuBtn: action.menuBtn,
       };
-
+    case "USER":
+      return {
+        ...state,
+        user: action.user,
+      };
+    case "MESSAGE_PUSH":
+      let temp = state.MessageStore;
+      temp = [...temp, ...action.message];
+      return {
+        ...state,
+        MessageStore: temp,
+      };
+    case "SEND_WITH_BTN":
+      return {
+        ...state,
+        sendWithBtn: action.val,
+      };
+    case "EMPTY_MSG_BOX":
+      return {
+        ...state,
+        MessageStore: action.val,
+      };
     default:
   }
 }

@@ -55,21 +55,21 @@ const App = () => {
         {/* {console.log("Username--",state.username)} */}
         <Switch>
           <Route path="/login">
-            {state.username != null &&
-              (state.username ? <Redirect to="/home" /> : <Login />)}
+            {state?.username != null &&
+              (state?.username ? <Redirect to="/home" /> : <Login />)}
           </Route>
           <Route path="/signup">
-            {state.username != null &&
-              (state.username ? <Redirect to="/home" /> : <Signup />)}
+            {state?.username != null &&
+              (state?.username ? <Redirect to="/home" /> : <Signup />)}
           </Route>
           <Route path="/home">
-            {state.username != null &&
-              (state.username ? <SlackApp /> : <Signup />)}
+            {state?.username != null &&
+              (state?.username ? <SlackApp /> : <Signup />)}
           </Route>
 
           <Route exact path="/">
             {auth != null ? (
-              state.username ? (
+              state?.username ? (
                 <Redirect to="/home" />
               ) : (
                 <Redirect to="/login" />

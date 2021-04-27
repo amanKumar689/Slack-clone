@@ -37,14 +37,14 @@
   font-family: Consolas;
   line-height: 1.4;
 }
-.chatBox_messasge_box p h5 {
+.chatBox_messasge_box p span {
   letter-spacing: 2px;
   font-family: Gill Sans MT;
   font-size: 13px;
   display: flex;
   align-content: center;
 }
-.chatBox_messasge_box p h5 span {
+.chatBox_messasge_box p span span {
   padding-top: 7px;
 }
 .chatBox_header p {

@@ -22,11 +22,12 @@ class Chat extends Component {
   }
   deleteHandler() {
     db.collection("rooms")
+      .doc(this.context[0].user.uid)
+      .collection("roomManage")
       .doc(this.context[0].CurrentRoomName)
       .delete()
       .then(() => {
         const dispatch = this.context[1];
-
         dispatch({
           type: "SET_ROOM_NAME",
           roomName: "No Room Selected",
@@ -44,12 +45,15 @@ class Chat extends Component {
   sendMessageHandler() {
     // Sending Message along with inforamtion to firebase's Firestore
     const [state, dispatch] = this.context;
+
     this.Msg = this.state.messageBox;
     this.setState({ ...this.state, messageBox: "" });
     if (this.props.roomName != "No Room Selected") {
       db.collection("rooms")
+        .doc(state.user.uid)
+        .collection("roomManage")
         .doc(state.CurrentRoomName)
-        .collection("MessagesDetail")
+        .collection("messages")
         .add({
           imageUrl: this.context[0].imageUrl,
           message: this.Msg,
@@ -59,7 +63,9 @@ class Chat extends Component {
         .then(() => {
           const chatBox = document.getElementsByClassName("chatBox_message")[0];
           if (chatBox != undefined) {
-            chatBox.scrollTop = chatBox.scrollTop + 100;
+            setTimeout(() => {
+              chatBox.scrollTop = chatBox.scrollTop + 100;
+            }, 500);
           }
         })
         .catch((err) => {
@@ -161,24 +167,17 @@ class Chat extends Component {
               (channel) => channel === this.context[0].CurrentRoomName
             ) >= 0 ? (
               <div className="chatBox_messasge_box">
-                {this.props.data != null &&
-                  this.props.data.map(
+                {this.context[0].MessageStore != null &&
+                  this.context[0].MessageStore.map(
                     ({ message, username, imageUrl }, index) => {
                       return (
                         <p key={`m` + index} className="message_width_adjust">
-                          <h5>
+                          <span>
                             {index != 0 && (
-                              <Avatar
-                                alt={username}
-                                src={
-                                  this.context[0].imageUrl == null
-                                    ? "/"
-                                    : this.context[0].imageUrl
-                                }
-                              />
+                              <Avatar alt={username} src={imageUrl} />
                             )}
                             &nbsp;&nbsp;&nbsp; <span> {username}</span>
-                          </h5>
+                          </span>
                           <br />
                           {message}
                         </p>
