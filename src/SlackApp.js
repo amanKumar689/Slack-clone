@@ -41,13 +41,14 @@ class SlackApp extends React.Component {
 
   // Method 1
 
-  onSnapshotIntializer(name) {
+  onSnapshotIntializer(id) {
     const [state, dispatch] = this.context;
+
     const unsubscribe = db
       .collection("rooms")
       .doc(state.user.uid)
       .collection("roomManage")
-      .doc(name)
+      .doc(id)
       .collection("messages")
       .orderBy("timeAtcreated", "asc")
       .onSnapshot((snap) => {
@@ -94,11 +95,30 @@ class SlackApp extends React.Component {
         if (this.context[0].CurrentRoomName != name) {
           !this.context[0].CurrentRoomName == "No Room Selected" &&
             this.state.unsubscribe();
-          this.onSnapshotIntializer(name);
+
+          //Each time runs when room changes set room Id
+
+          db.collection("rooms")
+            .doc(state.user.uid)
+            .collection("roomManage")
+            .where("name", "==", name)
+            .get()
+            .then((querySnapshot) =>
+              querySnapshot.forEach((doc) => {
+                this.onSnapshotIntializer(doc.id);
+                dispatch({
+                  type: "ROOM_ID",
+                  val: doc.id,
+                });
+              })
+            );
+
           dispatch({
             type: "SET_ROOM_NAME",
             roomName: name,
           });
+
+          // when got new room  then -- empty my chatbox && -- then load message
         }
       }
     }

@@ -11,6 +11,7 @@ const intialState = {
   user: null,
   MessageStore: [],
   sendWithBtn: false,
+  roomId: null,
 };
 
 function reducer(state, action) {
@@ -50,6 +51,11 @@ function reducer(state, action) {
       return {
         ...state,
         MessageStore: action.val,
+      };
+    case "ROOM_ID":
+      return {
+        ...state,
+        roomId: action.val,
       };
     default:
   }

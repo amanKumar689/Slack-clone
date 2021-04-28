@@ -24,7 +24,7 @@ class Chat extends Component {
     db.collection("rooms")
       .doc(this.context[0].user.uid)
       .collection("roomManage")
-      .doc(this.context[0].CurrentRoomName)
+      .doc(this.context[0].roomId)
       .delete()
       .then(() => {
         const dispatch = this.context[1];
@@ -45,14 +45,13 @@ class Chat extends Component {
   sendMessageHandler() {
     // Sending Message along with inforamtion to firebase's Firestore
     const [state, dispatch] = this.context;
-
     this.Msg = this.state.messageBox;
     this.setState({ ...this.state, messageBox: "" });
     if (this.props.roomName != "No Room Selected") {
       db.collection("rooms")
         .doc(state.user.uid)
         .collection("roomManage")
-        .doc(state.CurrentRoomName)
+        .doc(state.roomId)
         .collection("messages")
         .add({
           imageUrl: this.context[0].imageUrl,
@@ -125,8 +124,9 @@ class Chat extends Component {
                   className={"menu"}
                   onClick={() => {
                     this.setState({
+
                       ...this.state,
-                      menuShow: !this.state.menuShow,
+                       menuShow: !this.state.menuShow,
                     });
                     const dispatch = this.context[1];
                     dispatch({
