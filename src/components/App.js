@@ -5,6 +5,7 @@ import reducer, { InfoContext, intialState, MyInfo } from "./reducer";
 import Alert from "@material-ui/lab/Alert";
 import IconButton from "@material-ui/core/IconButton";
 import Collapse from "@material-ui/core/Collapse";
+import Grow from '@material-ui/core/Grow';
 import CloseIcon from "@material-ui/icons/Close";
 import {
   BrowserRouter as Router,
@@ -52,11 +53,10 @@ const App = () => {
     }, 3000);
   }, []);
 
-  console.log("alert model ", state.alert);
   return (
     <>
       <div className="alert">
-        <Collapse in={state.alert.open}>
+        <Grow in={state.alert.open}>
           <Alert
             variant="filled"
             severity={state.alert.Message_type}
@@ -80,10 +80,9 @@ const App = () => {
           >
             {state.alert.message}
           </Alert>
-        </Collapse>
+        </Grow>
       </div>
       <Router>
-        {/* {console.log("Username--",state.username)} */}
         <Switch>
           <Route path="/login">
             {state?.username != null &&

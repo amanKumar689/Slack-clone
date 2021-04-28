@@ -14,6 +14,8 @@ import { withRouter } from "react-router-dom";
 import firebase from "firebase";
 import { InfoContext } from "./reducer";
 import CloseIcon from "@material-ui/icons/Close";
+import room_list from "./smallComp/room_list";
+import room_create from "./smallComp/room_create";
 class Sidebar extends Component {
   constructor(props) {
     super(props);
@@ -24,6 +26,7 @@ class Sidebar extends Component {
       channelList: [],
       TempRoomName: null,
     };
+    this.setState = this.setState.bind(this);
     this.createBtn = React.createRef();
     this.handleClickOpen = this.handleClickOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
@@ -38,26 +41,9 @@ class Sidebar extends Component {
         type: "USER",
         user: user,
       });
-
-      // Fetch first time channel List from my Locker
-      db.collection("rooms")
-        .doc(user.uid)
-        .collection("roomManage")
-        .onSnapshot((snap) => {
-          const List = [];
-          snap.forEach((val) => {
-            List.push(val.data().name);
-          });
-
-          dispatch({
-            type: "SET_CHANNELS",
-            channels: List,
-          });
-        });
+      room_list(state, dispatch, user);
     });
   }
-
-  componentDidUpdate(prevProps, prevState) {}
 
   handleClickOpen = () => {
     this.setState({ ...this.state, open: true });
@@ -66,46 +52,16 @@ class Sidebar extends Component {
   // After click on create button
 
   handleClose = (event) => {
-    const dispatch = this.context[1];
-    if (event.currentTarget.id === "create") {
-      let df = db
-        .collection("rooms")
-        .doc(this.context[0].user.uid)
-        .collection("roomManage")
-        .doc();
-      df.set({
-        name: this.state.TempRoomName,
-      })
-        .then((docRef) => {
-          df.collection("messages")
-            .doc("startup_message")
-            .set({
-              message: "welcome to this channel",
-              timeAtcreated: firebase.firestore.FieldValue.serverTimestamp(),
-            })
-            .then(() => {
-              dispatch({
-                type: "alert_model",
-                message: "room created",
-                Message_type: "success",
-                open: true,
-              });
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        })
-        .catch((err) => {
-          console.log("error", err);
-          this.dispatch({
-            type: "alert_model",
-            message: err.message,
-            Message_type: "error",
-            open: true,
-          });
-        });
-    }
-    this.setState({ ...this.state, open: false }); // manage dialog opening
+    const [state, dispatch] = this.context;
+    room_create(
+      state,
+      dispatch,
+      this.setState,
+      this.state.TempRoomName,
+      db,
+      event,
+      this.state
+    );
   };
 
   roomNameHandler(event) {

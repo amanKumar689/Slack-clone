@@ -21,6 +21,7 @@ class Chat extends Component {
     this.deleteHandler = this.deleteHandler.bind(this);
   }
   deleteHandler() {
+this.context[0].roomId!=null &&
     db.collection("rooms")
       .doc(this.context[0].user.uid)
       .collection("roomManage")
@@ -163,7 +164,7 @@ class Chat extends Component {
                 }
                 onClick={this.deleteHandler}
               >
-                {!this.context[0].menuBtn && <span> Delete </span>}
+                {!this.state.Mobile_Version && <span> Delete </span>}
               </Button>
             )}
           </div>

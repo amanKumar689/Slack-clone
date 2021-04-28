@@ -20,7 +20,6 @@ const intialState = {
 };
 
 function reducer(state, action) {
-  console.log("reducer", action);
   switch (action.type) {
     case "SET_CHANNELS":
       return { ...state, channelList: action.channels };
