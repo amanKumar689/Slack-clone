@@ -29,6 +29,12 @@ class Chat extends Component {
       .then(() => {
         const dispatch = this.context[1];
         dispatch({
+          type: "alert_model",
+          message: "Deleted succesfully",
+          Message_type: "success",
+          open: true,
+        });
+        dispatch({
           type: "SET_ROOM_NAME",
           roomName: "No Room Selected",
         });
@@ -124,9 +130,8 @@ class Chat extends Component {
                   className={"menu"}
                   onClick={() => {
                     this.setState({
-
                       ...this.state,
-                       menuShow: !this.state.menuShow,
+                      menuShow: !this.state.menuShow,
                     });
                     const dispatch = this.context[1];
                     dispatch({

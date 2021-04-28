@@ -6,6 +6,8 @@ import Chat from "./components/Chat";
 import { withRouter } from "react-router-dom";
 import { db } from "./config/config";
 import { InfoContext } from "./components/reducer";
+
+
 class SlackApp extends React.Component {
   constructor(props) {
     super(props);
@@ -131,6 +133,7 @@ class SlackApp extends React.Component {
   render() {
     return (
       <>
+        
         <div className="slackClone">
           <Header />
           <div className="slack_body">

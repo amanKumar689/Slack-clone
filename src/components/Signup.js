@@ -48,16 +48,31 @@ class Signup extends Component {
           value="Sign up"
           id="submit"
           onClick={() => {
-            authHandler(this.state).then((user) => {
-              let username = user.user.email.split("@").slice(0, 1);
+            authHandler(this.state)
+              .then((user) => {
+                dispatch({
+                  type: "alert_model",
+                  message: "Successfully signed up !!!!",
+                  Message_type: "success",
+                  open: true,
+                });
+                let username = user.user.email.split("@").slice(0, 1);
 
-              dispatch({
-                type: "SET_USERNAME",
-                username: username[0],
-                imageUrl: user.user.photoURL,
+                dispatch({
+                  type: "SET_USERNAME",
+                  username: username[0],
+                  imageUrl: user.user.photoURL,
+                });
+                this.props.history.push("/home");
+              })
+              .catch((err) => {
+                dispatch({
+                  type: "alert_model",
+                  message: err.message,
+                  Message_type: "error",
+                  open: true,
+                });
               });
-              this.props.history.push("/home");
-            });
           }}
         />
         <Link to="/login">Login </Link>
@@ -69,6 +84,12 @@ class Signup extends Component {
             style={{ cursor: "pointer" }}
             onClick={() => {
               authHandler({ type: "google" }).then((user) => {
+                dispatch({
+                  type: "alert_model",
+                  message: "Successfully logged in  !!!!",
+                  Message_type: "success",
+                  open: true,
+                });
                 let username = user.user.email.split("@").slice(0, 1);
                 dispatch({
                   type: "SET_USERNAME",

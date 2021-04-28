@@ -24,8 +24,7 @@ class Sidebar extends Component {
       channelList: [],
       TempRoomName: null,
     };
-    
-    this.createBtn = React.createRef()
+    this.createBtn = React.createRef();
     this.handleClickOpen = this.handleClickOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.roomNameHandler = this.roomNameHandler.bind(this);
@@ -67,6 +66,7 @@ class Sidebar extends Component {
   // After click on create button
 
   handleClose = (event) => {
+    const dispatch = this.context[1];
     if (event.currentTarget.id === "create") {
       let df = db
         .collection("rooms")
@@ -83,13 +83,26 @@ class Sidebar extends Component {
               message: "welcome to this channel",
               timeAtcreated: firebase.firestore.FieldValue.serverTimestamp(),
             })
-            .then(() => {})
+            .then(() => {
+              dispatch({
+                type: "alert_model",
+                message: "room created",
+                Message_type: "success",
+                open: true,
+              });
+            })
             .catch((err) => {
               console.log(err);
             });
         })
         .catch((err) => {
           console.log("error", err);
+          this.dispatch({
+            type: "alert_model",
+            message: err.message,
+            Message_type: "error",
+            open: true,
+          });
         });
     }
     this.setState({ ...this.state, open: false }); // manage dialog opening
@@ -171,8 +184,8 @@ class Sidebar extends Component {
                     fullWidth
                     onChange={this.roomNameHandler}
                     onKeyPress={(e) => {
-                  e.key === "Enter" && this.createBtn.current.click()
-                }}
+                      e.key === "Enter" && this.createBtn.current.click();
+                    }}
                   />
                 </DialogContent>
                 <DialogActions>
@@ -183,7 +196,7 @@ class Sidebar extends Component {
                     id="create"
                     onClick={this.handleClose}
                     color="primary"
-                    ref= {this.createBtn}
+                    ref={this.createBtn}
                   >
                     Create
                   </Button>

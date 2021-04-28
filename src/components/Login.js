@@ -47,17 +47,32 @@ class Login extends Component {
           value="Login"
           id="submit"
           onClick={() => {
-            authHandler(this.state).then((user) => {
-              let username = user.user.email.split("@").slice(0, 1);
+            authHandler(this.state)
+              .then((user) => {
+                dispatch({
+                  type: "alert_model",
+                  message: "Successfully logged in !!!!",
+                  Message_type: "success",
+                  open: true,
+                });
+                let username = user.user.email.split("@").slice(0, 1);
 
-              dispatch({
-                type: "SET_USERNAME",
-                username: username[0],
-                imageUrl: user.photoURL,
+                dispatch({
+                  type: "SET_USERNAME",
+                  username: username[0],
+                  imageUrl: user.photoURL,
+                });
+
+                this.props.history.push("/home");
+              })
+              .catch((err) => {
+                dispatch({
+                  type: "alert_model",
+                  message: err.message,
+                  open: true,
+                  Message_type: "error",
+                });
               });
-
-              this.props.history.push("/home");
-            });
           }}
         />
         <Link to="signup"> Sign up</Link>
@@ -70,6 +85,12 @@ class Login extends Component {
             style={{ cursor: "pointer" }}
             onClick={() => {
               authHandler({ type: "google" }).then((user) => {
+                dispatch({
+                  type: "alert_model",
+                  message: "Successfully logged in !!!!",
+                  Message_type: "success",
+                  open: true,
+                });
                 let username = user.user.email.split("@").slice(0, 1);
 
                 // console.log("running auth state change",user.user.photoURL);

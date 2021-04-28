@@ -12,9 +12,15 @@ const intialState = {
   MessageStore: [],
   sendWithBtn: false,
   roomId: null,
+  alert: {
+    Message_type: "success",
+    message: "Welcome !!!!",
+    open: false,
+  },
 };
 
 function reducer(state, action) {
+  console.log("reducer", action);
   switch (action.type) {
     case "SET_CHANNELS":
       return { ...state, channelList: action.channels };
@@ -56,6 +62,16 @@ function reducer(state, action) {
       return {
         ...state,
         roomId: action.val,
+      };
+    case "alert_model":
+      return {
+        ...state,
+        alert: {
+          ...state.alert,
+          open: action.open,
+          message: action.message,
+          Message_type: action.Message_type,
+        },
       };
     default:
   }

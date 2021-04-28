@@ -1,18 +1,26 @@
 .login{
-    border:2px solid blue;
     /* padding:auto */
-    width:50%;
-    padding:30px;
-    height: 300px;
+    /* background:linear-gradient(to bottom, #b5e8e2,gray); */
+    max-width:460px;
+    padding:50px;
+    height: 360px;
     margin:auto;
-    margin-top:60px;
+    margin-top:90px;
     display:flex;
     flex-direction:column;
+    background-color:;
+    box-shadow:0px 1px 4px 3px lightgrey;
 }
 .login input{
     padding:10px;
-    margin-bottom:20px
+    margin-bottom:27px;
+    border-radius:40px;
+    outline:none;
+    border:1px solid gray;
 }
 #submit{
     cursor: pointer;
+    background-color:#247ec7;
+    color:white;
+    border:none;
 }

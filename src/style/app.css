@@ -13,3 +13,19 @@
   display: flex;
   justify-content: center;
 }
+.MuiPaper-root {
+
+  padding:10px 40px 10px 40px !important;
+ } 
+.alert{
+ position: absolute;
+width:60%;
+bottom:60px;
+margin-left:20%;
+  overflow:hidden
+}
+.MuiAlert-icon{
+  position: absolute;
+  top:22px !important;
+  left:5px;
+}
