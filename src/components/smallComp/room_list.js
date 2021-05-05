@@ -1,14 +1,12 @@
 import { db } from "../../config/config";
 export default function room_list(state, dispatch, user) {
   db.collection("rooms")
-    .doc(user.uid)
-    .collection("roomManage")
+    .where("UID", "==", user.uid)
     .onSnapshot((snap) => {
       const List = [];
       snap.forEach((val) => {
-        List.push(val.data().name);
+        List.push({ id: val.id, roomName: val.data().roomName });
       });
-
       dispatch({
         type: "SET_CHANNELS",
         channels: List,

@@ -8,7 +8,6 @@ export default class Landing extends Component {
       <div className="landing">
         <img src={Logo} />
         <h3>
-          {" "}
           <span> Welcome to my App </span>
           <div className="animation"> </div>
         </h3>

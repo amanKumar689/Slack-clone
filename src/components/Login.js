@@ -27,7 +27,6 @@ class Login extends Component {
   render() {
     const [state, dispatch] = this.context;
     const { match, location, history } = this.props;
-    //  console.log("Detail",match,location);
     return (
       <div className="login">
         <input
@@ -93,7 +92,6 @@ class Login extends Component {
                 });
                 let username = user.user.email.split("@").slice(0, 1);
 
-                // console.log("running auth state change",user.user.photoURL);
                 dispatch({
                   type: "SET_USERNAME",
                   username: username[0],

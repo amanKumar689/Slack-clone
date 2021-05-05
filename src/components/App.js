@@ -5,7 +5,7 @@ import reducer, { InfoContext, intialState, MyInfo } from "./reducer";
 import Alert from "@material-ui/lab/Alert";
 import IconButton from "@material-ui/core/IconButton";
 import Collapse from "@material-ui/core/Collapse";
-import Grow from '@material-ui/core/Grow';
+import Grow from "@material-ui/core/Grow";
 import CloseIcon from "@material-ui/icons/Close";
 import {
   BrowserRouter as Router,
@@ -42,7 +42,6 @@ const App = () => {
           setAuth(true);
         })
         .catch((err) => {
-          console.log("error", err);
           dispatch({
             type: "SET_USERNAME",
             username: false,

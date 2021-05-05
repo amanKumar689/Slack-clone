@@ -17,6 +17,8 @@ const intialState = {
     message: "Welcome !!!!",
     open: false,
   },
+  mode: null, // joined || owned
+  joinRoomList: [],
 };
 
 function reducer(state, action) {
@@ -72,6 +74,29 @@ function reducer(state, action) {
           Message_type: action.Message_type,
         },
       };
+    case "mode":
+      return {
+        ...state,
+        mode: action.val,
+      };
+    case "join":
+      const result = state.joinRoomList.findIndex(
+        (value) => value.id === action.val.id
+      );
+
+      if (result < 0) {
+        return {
+          ...state,
+          joinRoomList: [
+            ...state.joinRoomList,
+            { roomName: action.val.roomName, id: action.val.id },
+          ],
+        };
+      } else {
+        return {
+          ...state,
+        };
+      }
     default:
   }
 }

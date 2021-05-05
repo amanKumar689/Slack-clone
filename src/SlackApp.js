@@ -22,35 +22,25 @@ class SlackApp extends React.Component {
   // setting room name from our Store
   componentDidMount() {
     const [state, dispatch] = this.context;
-    let name = this.props.location.search;
 
-    if (name != "") {
-      name = name.split("?");
-      name = name.splice(1);
-      name = name[0].split("=").splice("1");
-      name = name[0];
-      if (name.search("%")) {
-        let check = name.split("%20");
-        check = check.join(" ");
-        name = check;
-      }
-      dispatch({
-        type: "SET_ROOM_NAME",
-        roomName: name[0],
-      });
-    }
+    // room name fetching from url
+
+    let id = this.props.location.search;
+
+    const val =
+      id != "" ? id?.split("?").slice(1)[0].split("=").slice(1)[0] : "";
+
+    state.user != null &&
+      Message_fetching(state, dispatch, this.setState, db, val, this.state);
   }
 
   componentDidUpdate(prevProps, prevState) {
     const [state, dispatch] = this.context;
-    Message_fetching(
-      state,
-      dispatch,
-      this.setState,
-      db,
-      this.props.location.search,
-      this.state
-    );
+    let id = this.props.location.search;
+    const val =
+      id != "" ? id.split("?").slice(1)[0].split("=").slice(1)[0] : "";
+    state.user != null &&
+      Message_fetching(state, dispatch, this.setState, db, val, this.state);
   }
 
   render() {
@@ -60,7 +50,7 @@ class SlackApp extends React.Component {
           <Header />
           <div className="slack_body">
             <Sidebar />
-            <Chat data={this.context[0].MSG} />
+            <Chat data={this.context[0].MessageStore} />
           </div>
         </div>
       </>

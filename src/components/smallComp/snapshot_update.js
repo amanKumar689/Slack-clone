@@ -8,22 +8,22 @@ export default function onSnapshotIntializer(
   db,
   state
 ) {
-    dispatch({
-        type: "EMPTY_MSG_BOX",
-        val: [],
-      });
+     dispatch({
+    type: "EMPTY_MSG_BOX",
+    val: [],
+   });
+
+  // push message to Mystore
   const unsubscribe = db
-    .collection("rooms")
-    .doc(reduxstate.user.uid)
-    .collection("roomManage")
-    .doc(id)
-    .collection("messages")
-    .orderBy("timeAtcreated", "asc")
-    .onSnapshot((snap) => {
+  .collection("rooms")
+  .doc(id)
+  .collection("messages")
+  .orderBy("timeAtcreated", "asc")
+  .onSnapshot((snap) => {
       const MessageData = [];
       snap.docChanges().forEach((val) => {
         if (!val.doc.metadata.hasPendingWrites) {
-          MessageData.push(val.doc.data());
+       reduxstate.roomId!="not found" && MessageData.push(val.doc.data());
         }
       });
 
@@ -31,9 +31,13 @@ export default function onSnapshotIntializer(
         type: "MESSAGE_PUSH",
         message: MessageData,
       });
+      const chatBox = document.getElementsByClassName("chatBox_message")[0];
+      if (chatBox != undefined) {
+        setTimeout(() => {
+          chatBox.scrollTop = chatBox.scrollTop + 100;
+        }, 500);
+      }
     });
-
-
 
   setState({ ...state, unsubscribe: unsubscribe });
 }

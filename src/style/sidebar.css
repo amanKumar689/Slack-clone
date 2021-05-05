@@ -7,6 +7,7 @@
   transition: 1s ease;
   overflow: hidden;
   position: relative;
+  padding-bottom: 37px;
 }
 .sidebar_header {
   border-top: 1px solid #371038;
@@ -24,9 +25,6 @@
   font-family: Calibri;
   letter-spacing: 1px;
 }
-.sidebar ul li {
-  min-width: 190px !important;
-}
 .sidebar ul li:not(:last-of-type) {
   padding: 10px 3px 10px 28px;
   font-size: 13px;
@@ -40,15 +38,9 @@
   background-color: #4f1451;
 }
 .MuiSvgIcon-root {
-  /* display:flex; */
-  /* flex-wrap:wrap; */
   position: absolute;
   top: -5px;
   cursor: pointer;
-}
-.MuiSvgIcon-root:hover {
-  /* transition: 0.3s ease; */
-  /* transform: rotateZ(90deg); */
 }
 .sidebar_body p {
   position: relative;
@@ -65,4 +57,15 @@
   position: relative;
   margin-top: 10px;
   padding: 0px 0px 0px 15px;
+}
+
+.sidebar_body::-webkit-scrollbar-track {
+  background: transparent;
+}
+.sidebar_body::-webkit-scrollbar {
+  width: 5px;
+}
+.sidebar_body::-webkit-scrollbar-thumb {
+  background: #7f4a81;
+  border-radius: 10px;
 }

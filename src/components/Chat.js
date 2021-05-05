@@ -20,29 +20,34 @@ class Chat extends Component {
     this.sendMessageHandler = this.sendMessageHandler.bind(this);
     this.deleteHandler = this.deleteHandler.bind(this);
   }
+
   deleteHandler() {
-this.context[0].roomId!=null &&
-    db.collection("rooms")
-      .doc(this.context[0].user.uid)
-      .collection("roomManage")
-      .doc(this.context[0].roomId)
-      .delete()
-      .then(() => {
-        const dispatch = this.context[1];
-        dispatch({
-          type: "alert_model",
-          message: "Deleted succesfully",
-          Message_type: "success",
-          open: true,
+    this.context[0].roomId != null &&
+      db
+        .collection("rooms")
+        .doc(this.context[0].roomId)
+        .delete()
+        .then(() => {
+          const dispatch = this.context[1];
+          dispatch({
+            type: "alert_model",
+            message: "Deleted succesfully",
+            Message_type: "success",
+            open: true,
+          });
+          dispatch({
+            type: "SET_ROOM_NAME",
+            roomName: "No Room Selected",
+          });
+        })
+        .catch((error) => {
+          dispatch({
+            type: "alert_model",
+            message: error.message,
+            Message_type: "error",
+            open: true,
+          });
         });
-        dispatch({
-          type: "SET_ROOM_NAME",
-          roomName: "No Room Selected",
-        });
-      })
-      .catch((error) => {
-        console.error("Error removing document: ", error);
-      });
   }
 
   messageStoreHandler(event) {
@@ -56,8 +61,6 @@ this.context[0].roomId!=null &&
     this.setState({ ...this.state, messageBox: "" });
     if (this.props.roomName != "No Room Selected") {
       db.collection("rooms")
-        .doc(state.user.uid)
-        .collection("roomManage")
         .doc(state.roomId)
         .collection("messages")
         .add({
@@ -75,7 +78,12 @@ this.context[0].roomId!=null &&
           }
         })
         .catch((err) => {
-          console.log(err);
+          dispatch({
+            type: "alert_model",
+            message: err.message,
+            Message_type: "error",
+            open: true,
+          });
         });
     }
   }
@@ -147,53 +155,50 @@ this.context[0].roomId!=null &&
               <span> # {this.context[0].CurrentRoomName}</span>
             </p>
 
-            {state.CurrentRoomName != "No Room Selected" && (
-              <Button
-                variant="contained"
-                color="secondary"
-                style={{ padding: "5px 10px 5px 20px" }}
-                id={this.state.Mobile_Version ? "DelBtn" : undefined}
-                startIcon={
-                  <DeleteIcon
-                    style={
-                      !this.state.Mobile_Version
-                        ? { marginTop: "8px", left: "2px", top: "-1px" }
-                        : { marginTop: "8px", left: "4px", top: "-5px" }
-                    }
-                  />
-                }
-                onClick={this.deleteHandler}
-              >
-                {!this.state.Mobile_Version && <span> Delete </span>}
-              </Button>
-            )}
+            {state.CurrentRoomName != "No Room Selected" &&
+              state.mode !== null &&
+              state.mode === "owned" && (
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  style={{ padding: "5px 10px 5px 20px" }}
+                  id={this.state.Mobile_Version ? "DelBtn" : undefined}
+                  startIcon={
+                    <DeleteIcon
+                      style={
+                        !this.state.Mobile_Version
+                          ? { marginTop: "8px", left: "2px", top: "-1px" }
+                          : { marginTop: "8px", left: "4px", top: "-5px" }
+                      }
+                    />
+                  }
+                  onClick={this.deleteHandler}
+                >
+                  {!this.state.Mobile_Version && <span> Delete </span>}
+                </Button>
+              )}
           </div>
-          {state.CurrentRoomName != "No Room Selected" &&
-            (this.context[0].channelList.findIndex(
-              (channel) => channel === this.context[0].CurrentRoomName
-            ) >= 0 ? (
-              <div className="chatBox_messasge_box">
-                {this.context[0].MessageStore != null &&
-                  this.context[0].MessageStore.map(
-                    ({ message, username, imageUrl }, index) => {
-                      return (
-                        <p key={`m` + index} className="message_width_adjust">
-                          <span>
-                            {index != 0 && (
-                              <Avatar alt={username} src={imageUrl} />
-                            )}
-                            &nbsp;&nbsp;&nbsp; <span> {username}</span>
-                          </span>
-                          <br />
-                          {message}
-                        </p>
-                      );
-                    }
-                  )}
-              </div>
-            ) : (
-              <h2 className="deleted"> Room Deleted !!</h2>
-            ))}
+          {state.CurrentRoomName != "No Room Selected" && (
+            <div className="chatBox_messasge_box">
+              {this.context[0].MessageStore != null &&
+                this.context[0].MessageStore.map(
+                  ({ message, username, imageUrl }, index) => {
+                    return (
+                      <p key={`m` + index} className="message_width_adjust">
+                        <span>
+                          {index != 0 && (
+                            <Avatar alt={username} src={imageUrl} />
+                          )}
+                          &nbsp;&nbsp;&nbsp; <span> {username}</span>
+                        </span>
+                        <br />
+                        {message}
+                      </p>
+                    );
+                  }
+                )}
+            </div>
+          )}
         </div>
         <div className="chatBox_input">
           {state.CurrentRoomName != "No Room Selected" && (

@@ -22,12 +22,13 @@ class Sidebar extends Component {
 
     // This state manage Dialog pop up and channelList that is fetched from database
     this.state = {
-      open: false,
-      channelList: [],
+      createOpen: false,
+      joinOpen: false,
       TempRoomName: null,
     };
     this.setState = this.setState.bind(this);
     this.createBtn = React.createRef();
+    this.joinBtn = React.createRef();
     this.handleClickOpen = this.handleClickOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.roomNameHandler = this.roomNameHandler.bind(this);
@@ -45,8 +46,10 @@ class Sidebar extends Component {
     });
   }
 
-  handleClickOpen = () => {
-    this.setState({ ...this.state, open: true });
+  handleClickOpen = (mode) => {
+    mode == "create"
+      ? this.setState({ ...this.state, createOpen: true })
+      : this.setState({ ...this.state, joinOpen: true });
   };
 
   // After click on create button
@@ -60,16 +63,23 @@ class Sidebar extends Component {
       this.state.TempRoomName,
       db,
       event,
-      this.state
+      this.state,
+      this.props.history
     );
   };
 
   roomNameHandler(event) {
-    this.setState({ ...this.state, TempRoomName: event.target.value });
+    this.setState({ ...this.state, TempRoomName: event.target.value }); // room Set from input
   }
 
-  channelHandler(event) {
-    this.props.history.push(`/home?room=${event.target.id}`);
+  channelHandler(event, type) {
+    type === "add"
+      ? this.props.history.push(
+          `/home?room=${this.context[0].channelList[event.target.id].id}`
+        )
+      : this.props.history.push(
+          `/home?room=${this.context[0].joinRoomList[event.target.id].id}`
+        ); // after channel create routing
   }
 
   render() {
@@ -106,8 +116,14 @@ class Sidebar extends Component {
             {this.context[0].channelList.length != 0 &&
               this.context[0].channelList.map((channel, index) => {
                 return (
-                  <li key={index} id={channel} onClick={this.channelHandler}>
-                    # {channel}
+                  <li
+                    key={index}
+                    id={index}
+                    onClick={(e) => {
+                      this.channelHandler(e, "add");
+                    }}
+                  >
+                    # {channel.roomName}
                   </li>
                 );
               })}
@@ -115,12 +131,15 @@ class Sidebar extends Component {
               <Button
                 variant="text"
                 style={{ color: "inherit", textTransform: "initial" }}
-                onClick={this.handleClickOpen}
+                onClick={() => {
+                  this.handleClickOpen("create");
+                }}
               >
                 Add a channel <AddIcon style={{ right: "-40px", top: "7px" }} />
               </Button>
+
               <Dialog
-                open={this.state.open}
+                open={this.state.createOpen}
                 onClose={this.handleClose}
                 aria-labelledby="form-dialog-title"
                 fullWidth={true}
@@ -148,6 +167,7 @@ class Sidebar extends Component {
                   <Button onClick={this.handleClose} color="primary">
                     Cancel
                   </Button>
+
                   <Button
                     id="create"
                     onClick={this.handleClose}
@@ -160,9 +180,79 @@ class Sidebar extends Component {
               </Dialog>
             </li>
           </ul>
-          <div className="channel_list">
-            <div className="addChannels"></div>
-          </div>
+          {/* // joined room  */}
+          <p>
+            Joined room &nbsp; <ArrowDropDownIcon />
+          </p>
+          <ul id="joined_room">
+            {this.context[0].joinRoomList.length != 0 &&
+              this.context[0].joinRoomList.map((room, index) => {
+                return (
+                  <li
+                    key={index}
+                    id={index}
+                    onClick={(e) => {
+                      this.channelHandler(e, "join");
+                    }}
+                  >
+                    # {room.roomName}
+                  </li>
+                );
+              })}
+            <li>
+              <Button
+                variant="text"
+                style={{ color: "inherit", textTransform: "initial" }}
+                onClick={() => {
+                  this.handleClickOpen("join");
+                }}
+              >
+                Join a channel{" "}
+                <AddIcon style={{ right: "-40px", top: "7px" }} />
+              </Button>
+
+              <Dialog
+                open={this.state.joinOpen}
+                onClose={this.handleClose}
+                aria-labelledby="form-dialog-title-2"
+                fullWidth={true}
+                id="joindialog"
+              >
+                <DialogTitle id="form-dialog-title-2">Room Id</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    &nbsp; Paste here room id to join &nbsp;&nbsp;&nbsp;
+                  </DialogContentText>
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    id=""
+                    label="Room id2"
+                    type="text"
+                    fullWidth
+                    onChange={this.roomNameHandler}
+                    onKeyPress={(e) => {
+                      e.key === "Enter" && this.joinBtn.current.click();
+                    }}
+                  />
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={this.handleClose} color="primary">
+                    Cancel
+                  </Button>
+
+                  <Button
+                    id="join"
+                    onClick={this.handleClose}
+                    color="primary"
+                    ref={this.joinBtn}
+                  >
+                    Join
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            </li>
+          </ul>
         </div>
       </div>
     );

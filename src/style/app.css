@@ -3,7 +3,10 @@
   margin: 0px;
   box-sizing: border-box;
 }
-
+#root{
+  max-width:100vw;
+  overflow: hidden;
+}
 .slack_body {
   display: flex;
   height: calc(100vh - 60px);
@@ -14,7 +17,7 @@
   justify-content: center;
 }
 .MuiPaper-root {
-  padding: 10px 30px 10px 40px !important;
+  /* padding: 10px 30px 10px 40px !important; */
 }
 .MuiAlert-action {
   padding: 0px !important;
@@ -26,15 +29,21 @@
 }
 .alert {
   position: fixed;
-  width: 300px;
-  top: 260px;
+  width: 250px;
+  top: 160px;
   right: 20px;
   z-index: 9999;
-}
-.MuiCollapse-wrapperInner {
 }
 .MuiAlert-icon {
   position: absolute;
   top: 22px !important;
   left: 5px;
+}
+
+.sidebar_body {
+  max-height: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  overflow-y: scroll;
+  padding-bottom: 22px;
 }
