@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React from "react";
 import "./style/app.css";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
@@ -7,14 +7,12 @@ import { withRouter } from "react-router-dom";
 import { db } from "./config/config";
 import { InfoContext } from "./components/reducer";
 import Message_fetching from "./components/smallComp/messageFetch";
-import onSnapshotIntializer from "./components/smallComp/snapshot_update";
 class SlackApp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       data: [],
       runStatus: true,
-      unsubscribe: null,
     };
     this.setState = this.setState.bind(this);
   }
@@ -32,7 +30,8 @@ class SlackApp extends React.Component {
 
     state.user != null &&
       Message_fetching(state, dispatch, this.setState, db, val, this.state);
-  }
+      
+    }
 
   componentDidUpdate(prevProps, prevState) {
     const [state, dispatch] = this.context;
@@ -41,9 +40,13 @@ class SlackApp extends React.Component {
       id != "" ? id.split("?").slice(1)[0].split("=").slice(1)[0] : "";
     state.user != null &&
       Message_fetching(state, dispatch, this.setState, db, val, this.state);
+
+   
   }
 
   render() {
+    
+    console.log("unsubscribe::--",this.context[0].unsubscribe);
     return (
       <>
         <div className="slackClone">

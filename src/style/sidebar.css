@@ -24,6 +24,7 @@
   font-size: 14px;
   font-family: Calibri;
   letter-spacing: 1px;
+  min-width: 190px;
 }
 .sidebar ul li:not(:last-of-type) {
   padding: 10px 3px 10px 28px;

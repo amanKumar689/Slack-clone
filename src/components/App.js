@@ -1,12 +1,14 @@
 import React, { useContext, useEffect, useReducer, useState } from "react";
 import SlackApp from "../SlackApp";
 import Landing from "./Landing";
-import reducer, { InfoContext, intialState, MyInfo } from "./reducer";
+import reducer, { InfoContext } from "./reducer";
 import Alert from "@material-ui/lab/Alert";
 import IconButton from "@material-ui/core/IconButton";
-import Collapse from "@material-ui/core/Collapse";
 import Grow from "@material-ui/core/Grow";
 import CloseIcon from "@material-ui/icons/Close";
+import room_list from "./smallComp/room_list";
+import firebase from "firebase";
+
 import {
   BrowserRouter as Router,
   Switch,
@@ -29,29 +31,45 @@ const App = () => {
   const [auth, setAuth] = useState(null);
   const [state, dispatch] = useContext(InfoContext);
   useEffect(() => {
-    setTimeout(() => {
-      authState()
-        .then((user) => {
-          let username = user.email.split("@").slice(0, 1);
-
-          dispatch({
-            type: "SET_USERNAME",
-            username: username[0],
-            imageUrl: user.photoURL,
-          });
-          setAuth(true);
-        })
-        .catch((err) => {
-          dispatch({
-            type: "SET_USERNAME",
-            username: false,
-            imageUrl: null,
-          });
-          setAuth(false);
+    firebase.auth().onAuthStateChanged(function (user) {
+      if (user) {
+        // console.log("LOGG", user);
+        // room_list(state, dispatch, user);
+        let username = user.email.split("@").slice(0, 1);
+        // console.log("logged in ", user.uid);
+        dispatch({
+          type: "USER",
+          user: user,
         });
-    }, 3000);
-  }, []);
+        dispatch({
+          type: "SET_USERNAME",
+          username: username[0],
+          imageUrl: user.photoURL || "",
+        });
+        room_list(state, dispatch, user);
+        setAuth(true);
+      } else {
+        // console.log("OUT", user);        // console.log("Logged out", user);
+        dispatch({
+          type: "SET_USERNAME",
+          username: false,
+          imageUrl: null,
+        });
 
+        dispatch({
+          type:"join",
+          val:"empty"
+        })
+
+        dispatch({
+          type: "SET_CHANNELS",
+          channels: [],
+        });
+        setAuth(false);
+      }
+    });
+  }, []);
+  // console.log("insiide app ::", auth);
   return (
     <>
       <div className="alert">
@@ -77,7 +95,7 @@ const App = () => {
               </IconButton>
             }
           >
-            {state.alert.message}
+            &nbsp;&nbsp;&nbsp; {state.alert.message}
           </Alert>
         </Grow>
       </div>

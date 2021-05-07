@@ -11,14 +11,11 @@ export default function Message_fetching(
   state
 ) {
   // Get roomName if it is not present in Mystore
-
   if (
     search != "" &&
     reduxstate.roomId != search // give only once chance when room changes
   ) {
-    reduxstate.roomId != null &&
-      reduxstate.roomId != search &&
-      state.unsubscribe();
+    reduxstate.roomId != null && reduxstate.unsubscribe();
     // 1st Check In my Store and Store will fetch only my rooom
     const result = reduxstate.channelList.every((eachChannel) => {
       if (eachChannel.id == search) {
@@ -124,7 +121,7 @@ export default function Message_fetching(
   // when got new room  then -- empty my chatbox && -- then load message
   else if (
     reduxstate.roomId != search &&
-    search == "" &&
+    search != "" &&
     reduxstate.roomId != null
   ) {
     dispatch({

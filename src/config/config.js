@@ -21,11 +21,9 @@ const authHandler = (checkHandler) => {
           checkHandler.password
         )
           .then((user) => {
-            console.log("user:", user);
             resolve(user);
           })
           .catch((err) => {
-            console.log("error", err);
             reject(err);
           });
       });
@@ -39,7 +37,6 @@ const authHandler = (checkHandler) => {
             resolve(user);
           })
           .catch((err) => {
-            console.log("error", err);
             reject(err);
           });
       });
@@ -50,7 +47,6 @@ const authHandler = (checkHandler) => {
             resolve(user);
           })
           .catch((err) => {
-            console.log("error", err);
             reject(err);
           });
       });
@@ -58,20 +54,21 @@ const authHandler = (checkHandler) => {
       console.log("<<<<< Chhose correct option >>>>");
   }
 };
-const authState = () => {
-  return new Promise((resolve, reject) => {
-    firebase.auth().onAuthStateChanged(function (user) {
-      if (user) {
-        // User is signed in.
-
-        resolve(user);
-      } else {
-        // No user is signed in.
-        reject(user);
-      }
-    });
-  });
-};
+// const authState = () => {
+//   return new Promise((resolve, reject) => {    // after satistfied it will not going to work 
+//     firebase.auth().onAuthStateChanged(function (user) {
+//       if (user) {
+//         // User is signed in.
+// console.log("LOGG",user);
+// resolve(user);
+// } else {
+//         console.log("OUT",user);
+//         // No user is signed in.
+//         reject(user);
+//       }
+//     });
+//   });
+// };
 
 export default authHandler;
-export { db, authState, Auth };
+export { db , Auth };

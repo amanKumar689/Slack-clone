@@ -8,22 +8,22 @@ export default function onSnapshotIntializer(
   db,
   state
 ) {
-     dispatch({
+  dispatch({
     type: "EMPTY_MSG_BOX",
     val: [],
-   });
+  });
 
   // push message to Mystore
   const unsubscribe = db
-  .collection("rooms")
-  .doc(id)
-  .collection("messages")
-  .orderBy("timeAtcreated", "asc")
-  .onSnapshot((snap) => {
+    .collection("rooms")
+    .doc(id)
+    .collection("messages")
+    .orderBy("timeAtcreated", "asc")
+    .onSnapshot((snap) => {
       const MessageData = [];
       snap.docChanges().forEach((val) => {
         if (!val.doc.metadata.hasPendingWrites) {
-       reduxstate.roomId!="not found" && MessageData.push(val.doc.data());
+          reduxstate.roomId != "not found" && MessageData.push(val.doc.data());
         }
       });
 
@@ -39,5 +39,8 @@ export default function onSnapshotIntializer(
       }
     });
 
-  setState({ ...state, unsubscribe: unsubscribe });
+  dispatch({
+    type: "unsubscribe",
+    val: unsubscribe,
+  });
 }

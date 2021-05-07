@@ -11,7 +11,6 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { db, authState } from "../config/config";
 import { withRouter } from "react-router-dom";
-import firebase from "firebase";
 import { InfoContext } from "./reducer";
 import CloseIcon from "@material-ui/icons/Close";
 import room_list from "./smallComp/room_list";
@@ -37,13 +36,13 @@ class Sidebar extends Component {
 
   componentDidMount(prevprops) {
     const [state, dispatch] = this.context;
-    authState().then((user) => {
-      dispatch({
-        type: "USER",
-        user: user,
-      });
-      room_list(state, dispatch, user);
-    });
+    // authState().then((user) => {
+    //   dispatch({
+    //     type: "USER",
+    //     user: user,
+    //   });
+      // room_list(state, dispatch, user);
+    // });
   }
 
   handleClickOpen = (mode) => {
@@ -174,7 +173,7 @@ class Sidebar extends Component {
                     color="primary"
                     ref={this.createBtn}
                   >
-                    Create
+                    <span id="create">Create</span>
                   </Button>
                 </DialogActions>
               </Dialog>
@@ -247,7 +246,7 @@ class Sidebar extends Component {
                     color="primary"
                     ref={this.joinBtn}
                   >
-                    Join
+                    <span id="join"> Join</span>
                   </Button>
                 </DialogActions>
               </Dialog>

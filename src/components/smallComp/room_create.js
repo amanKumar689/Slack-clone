@@ -46,7 +46,7 @@ export default function room_create(
   } else if (event.currentTarget.id === "join") {
     history.push(`/home?room=${TempRoomName}`);
   }
-  event.target.id == "create"
+  state.createOpen == true
     ? setState({ ...state, createOpen: false })
     : setState({ ...state, joinOpen: false }); // manage dialog opening
 }

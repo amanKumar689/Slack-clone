@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer } from "react";
+import { createContext, useReducer } from "react";
 const intialState = {
   channelList: [],
   username: null,
@@ -19,9 +19,11 @@ const intialState = {
   },
   mode: null, // joined || owned
   joinRoomList: [],
+  unsubscribe: null,
 };
 
 function reducer(state, action) {
+  // console.log("REDUCER::==", action);
   switch (action.type) {
     case "SET_CHANNELS":
       return { ...state, channelList: action.channels };
@@ -80,6 +82,13 @@ function reducer(state, action) {
         mode: action.val,
       };
     case "join":
+      if(action.val === "empty")
+      {
+        return {
+          ...state ,
+          joinRoomList:[]
+        }
+      }
       const result = state.joinRoomList.findIndex(
         (value) => value.id === action.val.id
       );
@@ -97,6 +106,10 @@ function reducer(state, action) {
           ...state,
         };
       }
+      case "unsubscribe" :
+        return {
+          ...state , unsubscribe:action.val
+        }
     default:
   }
 }

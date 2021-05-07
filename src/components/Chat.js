@@ -22,13 +22,13 @@ class Chat extends Component {
   }
 
   deleteHandler() {
+    const dispatch = this.context[1];
     this.context[0].roomId != null &&
       db
         .collection("rooms")
         .doc(this.context[0].roomId)
         .delete()
         .then(() => {
-          const dispatch = this.context[1];
           dispatch({
             type: "alert_model",
             message: "Deleted succesfully",
